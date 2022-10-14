@@ -8,5 +8,5 @@ const newSale = async () => {
 };
 
 module.exports = {
-  newSale
+  newSale,
 };
