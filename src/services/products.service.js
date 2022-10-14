@@ -13,7 +13,14 @@ const reciveProductsById = async (id) => {
   return response;
 };
 
+const reciveProduct = async (name) => {
+  const response = await productModels.newProduct(name);
+  const obj = { id: response.insertId, name };
+  return obj;
+};
+
 module.exports = {
   reciveAllProducts,
   reciveProductsById,
+  reciveProduct,
 };
