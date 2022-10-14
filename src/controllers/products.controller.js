@@ -20,8 +20,13 @@ const getProductsId = async (req, res) => {
 
 const addProduct = async (req, res) => {
   const { name } = req.body;
+  try {
   const attProduct = await reciveProduct(name);
   return res.status(201).json(attProduct);
+  } catch (e) {
+    const error = JSON.parse(e.message);
+    return res.status(error.code).json({ message: error.message });
+  }
 };
 
 module.exports = {

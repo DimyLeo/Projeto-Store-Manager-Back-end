@@ -1,4 +1,5 @@
 const productModels = require('../models');
+const validationName = require('../middlewares/validationName');
 
 const reciveAllProducts = async () => {
   const response = await productModels.reqProducts();
@@ -14,6 +15,7 @@ const reciveProductsById = async (id) => {
 };
 
 const reciveProduct = async (name) => {
+  validationName(name);
   const response = await productModels.newProduct(name);
   const obj = { id: response.insertId, name };
   return obj;
