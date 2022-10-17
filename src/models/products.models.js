@@ -1,26 +1,26 @@
 const connection = require('./connection');
 
 const reqProducts = async () => {
-  const [result] = await connection.query(
+  const [response] = await connection.query(
     'SELECT * FROM StoreManager.products ORDER BY id ASC',
   );
-  return result;
+  return response;
 };
 
 const reqProductsById = async (id) => {
-  const [[result]] = await connection.query(
+  const [[response]] = await connection.query(
     'SELECT * FROM StoreManager.products WHERE id = ?',
     [id],
   );
-  return result;
+  return response;
 };
 
 const newProduct = async (name) => {
-  const [result] = await connection.execute(
+  const [response] = await connection.execute(
     'INSERT INTO  StoreManager.products (name) VALUE (?)',
     [name],
   );
-  return result;
+  return response;
 };
 
 const updateProdModel = async (id, name) => {
@@ -31,9 +31,18 @@ const updateProdModel = async (id, name) => {
   return response;
 };
 
+const deleteProdModel = async (id) => {
+  const response = await connection.execute(
+    'DELETE FROM StoreManager.products WHERE id = ?',
+    [id],
+  );
+  return response;
+};
+
 module.exports = {
   reqProducts,
   reqProductsById,
   newProduct,
   updateProdModel,
+  deleteProdModel,
 };

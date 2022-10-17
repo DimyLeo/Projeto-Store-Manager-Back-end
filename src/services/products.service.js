@@ -4,6 +4,7 @@ const {
   reqProductsById,
   newProduct,
   updateProdModel,
+  deleteProdModel,
 } = require('../models/products.models');
 const { idValid, prodValid } = require('../middlewares/validationSale');
 
@@ -42,9 +43,21 @@ const updateProdService = async (id, product) => {
   return { type: null, message: update };
 };
 
+const deleteProdService = async (id) => {
+  const validId = idValid(id);
+  if (validId.type) return validId;
+
+  const response = await reqProductsById(id);
+  if (!response) return { type: 'PRODUCT_NOT_FOUND', message: 'Product not found' };
+
+  await deleteProdModel(id);
+  return { type: null, message: '' };
+};
+
 module.exports = {
   reciveAllProducts,
   reciveProductsById,
   reciveProduct,
   updateProdService,
+  deleteProdService,
 };
