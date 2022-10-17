@@ -1,13 +1,13 @@
-const productModels = require('../models');
 const validationName = require('../middlewares/validationName');
+const { reqProducts, reqProductsById, newProduct } = require('../models/products.models');
 
 const reciveAllProducts = async () => {
-  const response = await productModels.reqProducts();
+  const response = await reqProducts();
   return response;
 };
 
 const reciveProductsById = async (id) => {
-  const response = await productModels.reqProductsById(Number(id));
+  const response = await reqProductsById(Number(id));
     if (!response) {
     throw new Error('Product not found');
   }
@@ -16,7 +16,7 @@ const reciveProductsById = async (id) => {
 
 const reciveProduct = async (name) => {
   validationName(name);
-  const response = await productModels.newProduct(name);
+  const response = await newProduct(name);
   const obj = { id: response.insertId, name };
   return obj;
 };

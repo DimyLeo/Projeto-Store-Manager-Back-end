@@ -1,11 +1,9 @@
 const express = require('express');
-const controller = require('../controllers/sale.controller');
-const validationSale = require('../middlewares/validationSale');
+const { salesController } = require('../controllers');
 
-const { addSale } = controller;
+const routes = express.Router();
 
-const router = express.Router();
+routes.get('/', salesController.AllSales);
+routes.get('/:id', salesController.SaleById);
 
-router.post('/', validationSale, addSale);
-
-module.exports = router;
+module.exports = routes;
