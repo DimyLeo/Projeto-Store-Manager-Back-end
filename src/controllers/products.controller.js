@@ -1,7 +1,10 @@
 const {
   reciveAllProducts,
   reciveProductsById,
-  reciveProduct } = require('../services/products.service');
+  reciveProduct,
+  updateProdService,
+} = require('../services/products.service');
+const errorMap = require('../middlewares/errorMap');
 
 const getProducts = async (_req, res) => {
   const allProducts = await reciveAllProducts();
@@ -29,8 +32,18 @@ const addProduct = async (req, res) => {
   }
 };
 
+const updateProduct = async (req, res) => {
+  const { id } = req.params;
+  const product = req.body;
+  const { type, message } = await updateProdService(id, product);
+
+  if (type) { return res.status(errorMap.mapError(type)).json({ message }); }
+  return res.status(200).json(message);
+};
+
 module.exports = {
   getProducts,
   getProductsId,
   addProduct,
+  updateProduct,
 };

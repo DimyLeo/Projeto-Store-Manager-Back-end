@@ -1,5 +1,11 @@
 const validationName = require('../middlewares/validationName');
-const { reqProducts, reqProductsById, newProduct } = require('../models/products.models');
+const {
+  reqProducts,
+  reqProductsById,
+  newProduct,
+  updateProdModel,
+} = require('../models/products.models');
+const { idValid, prodValid } = require('../middlewares/validationSale');
 
 const reciveAllProducts = async () => {
   const response = await reqProducts();
@@ -21,8 +27,24 @@ const reciveProduct = async (name) => {
   return obj;
 };
 
+const updateProdService = async (id, product) => {
+  const validId = idValid(id);
+  const validProd = prodValid(product);
+  if (validId.type) return validId;
+  if (validProd.type) return validProd;
+
+  const response = await reqProductsById(id);
+  if (!response) return { type: 'PRODUCT_NOT_FOUND', message: 'Product not found' };
+
+  const { name } = product;
+  await updateProdModel(id, name);
+  const update = await reqProductsById(id);
+  return { type: null, message: update };
+};
+
 module.exports = {
   reciveAllProducts,
   reciveProductsById,
   reciveProduct,
+  updateProdService,
 };
