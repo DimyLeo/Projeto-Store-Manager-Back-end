@@ -1,40 +1,20 @@
-const { expect } = require("chai");
 const chai = require("chai");
 const sinon = require("sinon");
-const { productsService } = require("../../../src/services");
-const { productsController } = require("../../../src/controllers");
-const {
-  success,
-  // idInvalid,
-  // idNotFound,
-  successId,
-} = require("./mocks/productsMock");
+const chaiHttp = require("chai-http");
 const sinonChai = require("sinon-chai");
+
+const { expect } = chai;
 chai.use(sinonChai);
+chai.use(chaiHttp);
+const app = require("../../../src/app");
+const connection = require("../../../src/models/connection");
 
-describe("Test controller products", () => {
-  beforeEach(sinon.restore);
-  it("Testa se retorna todos os produtos", async () => {
-    sinon.stub(productsService, "reciveAllProducts").resolves(success);
-    const req = {};
-    const res = {};
-    res.status = sinon.stub().returns(res);
-    res.json = sinon.stub().returns();
-    await productsController.getProducts(req, res);
+describe("Test product controller", function () {
+  it("Testa o retorno de todos os produtos", async function () {
+    sinon.stub(connection, "execute").resolves([]);
+    const response = await chai.request(app).get("/products");
 
-    expect(res.status).to.have.been.calledWith(200);
-    expect(res.json).to.have.been.calledWith(success.message);
+    expect(response.status).to.be.equal(200);
   });
-
-    it("Testa se recupera produto especifico por ID", async () => {
-    const req = { params: { id: 1 } };
-    const res = {};
-    res.status = sinon.stub().returns(res);
-    res.json = sinon.stub().returns();
-    sinon.stub(productsService, "reciveProductsById").resolves(successId);
-    await productsController.getProductsId(req, res);
-
-    expect(res.status).to.have.been.calledWith(200);
-    expect(res.json).to.have.been.calledWith(successId.message);
-  });
+  afterEach(sinon.restore);
 });
